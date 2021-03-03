@@ -7,6 +7,8 @@ module Simpler
       @routes = []
     end
 
+    # path - путь, к-ый нужно обработать
+    # route_point - название обработчика для переданного маршрута
     def get(path, route_point)
       add_route(:get, path, route_point)
     end

@@ -25,6 +25,7 @@ module Simpler
     private
 
     def extract_name
+      # то, что захватится перед 'Controller' занесется в группу по ключу :name - синтаксис групп (?<name_group>regex)
       self.class.name.match('(?<name>.+)Controller')[:name].downcase
     end
 
@@ -34,7 +35,7 @@ module Simpler
 
     def write_response
       body = render_body
-
+      # write дописывает body к ответу
       @response.write(body)
     end
 
