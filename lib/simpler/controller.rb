@@ -61,5 +61,9 @@ module Simpler
     def headers
       @response
     end
+
+    def status(status)
+      @response.status = status
+    end
   end
 end
