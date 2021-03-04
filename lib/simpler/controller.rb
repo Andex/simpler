@@ -34,7 +34,7 @@ module Simpler
     end
 
     def write_response
-      body = render_body
+      body = render_plain || render_body
       # write дописывает body к ответу
       @response.write(body)
     end
@@ -51,5 +51,11 @@ module Simpler
       @request.env['simpler.template'] = template
     end
 
+    def render_plain
+      return unless @request.env['simpler.template'].is_a?(Hash)
+
+      @response['Content-Type'] = 'text/plain'
+      @request.env['simpler.template'][:plain]
+    end
   end
 end
