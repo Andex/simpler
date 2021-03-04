@@ -57,5 +57,9 @@ module Simpler
       @response['Content-Type'] = 'text/plain'
       @request.env['simpler.template'][:plain]
     end
+
+    def headers
+      @response
+    end
   end
 end
