@@ -12,12 +12,17 @@ module Simpler
     end
 
     def make_response(action)
-      @request.env['simpler.controller'] = self
-      @request.env['simpler.action'] = action
+      if action.nil?
+        bad_request
+      else
+        @request.env['simpler.controller'] = self
+        @request.env['simpler.action'] = action
 
-      set_default_headers
-      send(action)
-      write_response
+        set_default_headers
+        params[:id] = set_request_param
+        send(action)
+        write_response
+      end
 
       @response.finish
     end
@@ -34,7 +39,7 @@ module Simpler
     end
 
     def write_response
-      body = render_body
+      body = render_plain || render_body
       # write дописывает body к ответу
       @response.write(body)
     end
@@ -51,5 +56,28 @@ module Simpler
       @request.env['simpler.template'] = template
     end
 
+    def render_plain
+      return unless @request.env['simpler.template'].is_a?(Hash)
+
+      @response['Content-Type'] = 'text/plain'
+      @request.env['simpler.template'][:plain]
+    end
+
+    def headers
+      @response
+    end
+
+    def status(status)
+      @response.status = status
+    end
+
+    def bad_request
+      status 404
+      @response.write("Page at URL '#{@request.env['PATH_INFO']}' not found\n")
+    end
+
+    def set_request_param
+      @request.env['REQUEST_PATH'].split('/')[2]
+    end
   end
 end
