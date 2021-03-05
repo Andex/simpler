@@ -6,8 +6,9 @@ class TestsController < Simpler::Controller
     # status(203)
   end
 
-  def create
+  def create; end
 
+  def show
+    @test = Test[params[:id]]
   end
-
 end

@@ -19,6 +19,7 @@ module Simpler
         @request.env['simpler.action'] = action
 
         set_default_headers
+        params[:id] = set_request_param
         send(action)
         write_response
       end
@@ -73,6 +74,10 @@ module Simpler
     def bad_request
       status 404
       @response.write("Page at URL '#{@request.env['PATH_INFO']}' not found\n")
+    end
+
+    def set_request_param
+      @request.env['REQUEST_PATH'].split('/')[2]
     end
   end
 end
