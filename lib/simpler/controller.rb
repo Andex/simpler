@@ -12,12 +12,16 @@ module Simpler
     end
 
     def make_response(action)
-      @request.env['simpler.controller'] = self
-      @request.env['simpler.action'] = action
+      if action.nil?
+        status 404
+      else
+        @request.env['simpler.controller'] = self
+        @request.env['simpler.action'] = action
 
-      set_default_headers
-      send(action)
-      write_response
+        set_default_headers
+        send(action)
+        write_response
+      end
 
       @response.finish
     end
