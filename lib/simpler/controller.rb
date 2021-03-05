@@ -13,7 +13,7 @@ module Simpler
 
     def make_response(action)
       if action.nil?
-        status 404
+        bad_request
       else
         @request.env['simpler.controller'] = self
         @request.env['simpler.action'] = action
@@ -68,6 +68,11 @@ module Simpler
 
     def status(status)
       @response.status = status
+    end
+
+    def bad_request
+      status 404
+      @response.write("Page at URL '#{@request.env['PATH_INFO']}' not found\n")
     end
   end
 end
